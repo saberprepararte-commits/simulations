@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Biology Simulations</title>
+    <meta
+      name="description"
+      content="A gallery of interactive biology simulations with direct access and teaching guides."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+    <script defer src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script defer src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script defer src="./supabase-config.js"></script>
+    <script defer src="./app.js"></script>
+    <script defer src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="#home" aria-label="Go to home">
+        <span class="brand-mark">Bio</span>
+        <span>
+          <strong>Simulations</strong>
+          <small>Interactive lab</small>
+        </span>
+      </a>
+      <nav class="top-nav" aria-label="Main">
+        <a href="#gallery">Gallery</a>
+        <button class="translate-toggle" id="translateToggle" type="button" aria-expanded="false">
+          <i data-lucide="languages"></i>
+          Translate
+        </button>
+      </nav>
+      <div class="translate-panel" id="translatePanel" aria-label="Language selector">
+        <div id="google_translate_element"></div>
+      </div>
+    </header>
+
+    <main id="home">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-content">
+          <p class="eyebrow">Biology to explore, touch, and think with</p>
+          <h1 id="hero-title">Simulations that turn living concepts into clear experiences</h1>
+          <p>
+            A visual library for opening each simulation, reviewing its details, and purchasing
+            teaching guides that support classroom work.
+          </p>
+          <div class="hero-actions">
+            <a class="button primary" href="#gallery">
+              <i data-lucide="grid-3x3"></i>
+              Explore
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section class="toolbar" aria-label="Gallery controls">
+        <div>
+          <p class="section-kicker">Collection</p>
+          <h2>Simulation gallery</h2>
+        </div>
+        <div class="toolbar-controls">
+          <label class="search">
+            <i data-lucide="search"></i>
+            <input id="searchInput" type="search" placeholder="Search simulations" autocomplete="off" />
+          </label>
+          <div class="layout-picker" aria-label="Gallery layout">
+            <button type="button" data-gallery-layout="mosaic" aria-pressed="true">
+              <i data-lucide="layout-grid"></i>
+              Mosaic
+            </button>
+            <button type="button" data-gallery-layout="list" aria-pressed="false">
+              <i data-lucide="list"></i>
+              List
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section id="gallery" class="gallery" data-layout="mosaic" aria-live="polite"></section>
+    </main>
+
+    <footer class="site-footer">
+      <button class="admin-footer-link" id="openAdminLogin" type="button">Admin</button>
+      <p>Developed by Rafael Otero (Biologist)</p>
+    </footer>
+
+    <dialog class="login-dialog" id="loginDialog" aria-labelledby="login-title">
+      <button class="icon-button close-dialog" id="closeLogin" type="button" aria-label="Close">
+        <i data-lucide="x"></i>
+      </button>
+      <form class="auth-form" id="loginForm">
+        <p class="section-kicker">Private access</p>
+        <h2 id="login-title">Administration</h2>
+        <label>
+          Admin email
+          <input id="adminUser" type="text" inputmode="email" autocomplete="username" required />
+        </label>
+        <label>
+          Password
+          <input id="adminPassword" type="password" autocomplete="current-password" required />
+        </label>
+        <p class="login-error" id="loginError" role="alert"></p>
+        <button class="button primary" type="submit">
+          <i data-lucide="lock-keyhole"></i>
+          Sign in
+        </button>
+      </form>
+    </dialog>
+
+    <dialog class="admin-dialog" id="adminDialog" aria-labelledby="admin-title">
+      <button class="icon-button close-dialog" id="closeAdmin" type="button" aria-label="Close">
+        <i data-lucide="x"></i>
+      </button>
+      <section id="admin" class="admin-shell" aria-labelledby="admin-title">
+        <div class="admin-heading">
+          <div>
+            <p class="section-kicker">Panel</p>
+            <h2 id="admin-title">Administration</h2>
+          </div>
+          <button class="button subtle" id="exportButton" type="button">
+            <i data-lucide="download"></i>
+            Export data
+          </button>
+        </div>
+
+        <form class="admin-form" id="simulationForm">
+          <input type="hidden" id="simulationId" />
+          <label>
+            Name
+            <input id="title" name="title" required placeholder="Mutation Lab" />
+          </label>
+          <label>
+            Horizontal image
+            <input id="image" name="image" required placeholder="Image URL or Google Drive share link" />
+          </label>
+          <label>
+            Simulation link
+            <input id="simulationUrl" name="simulationUrl" required placeholder="https://.../" />
+          </label>
+          <label>
+            Teacher Pay Teachers link
+            <input id="guideUrl" name="guideUrl" required placeholder="https://www.teacherspayteachers.com/..." />
+          </label>
+          <label class="wide">
+            Description
+            <textarea
+              id="description"
+              name="description"
+              rows="5"
+              required
+              placeholder="Describe what students will learn and how the simulation can be used in class."
+            ></textarea>
+          </label>
+          <div class="form-actions wide">
+            <button class="button primary" type="submit">
+              <i data-lucide="save"></i>
+              Save
+            </button>
+            <button class="button subtle" id="resetButton" type="button">
+              <i data-lucide="plus"></i>
+              New
+            </button>
+          </div>
+        </form>
+
+        <div class="admin-list" id="adminList" aria-label="Saved simulations"></div>
+      </section>
+    </dialog>
+
+    <dialog class="detail-dialog" id="detailDialog" aria-labelledby="detailTitle">
+      <button class="icon-button close-dialog" id="closeDialog" type="button" aria-label="Close">
+        <i data-lucide="x"></i>
+      </button>
+      <img id="detailImage" alt="" />
+      <div class="detail-body">
+        <p class="section-kicker">Details</p>
+        <h2 id="detailTitle"></h2>
+        <div class="detail-text-controls" aria-label="Detail text length">
+          <button type="button" data-detail-text="five" aria-pressed="false">5 lines</button>
+          <button type="button" data-detail-text="full" aria-pressed="true">Full text</button>
+        </div>
+        <p id="detailDescription"></p>
+        <div class="detail-actions">
+          <a class="button primary" id="detailSimulation" target="_blank" rel="noopener">
+            <i data-lucide="external-link"></i>
+            Open
+          </a>
+          <a class="button purchase" id="detailGuide" target="_blank" rel="noopener">
+            <i data-lucide="shopping-bag"></i>
+            Guide
+          </a>
+        </div>
+      </div>
+    </dialog>
+  </body>
+</html>
