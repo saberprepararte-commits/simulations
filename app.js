@@ -1,5 +1,6 @@
 const STORAGE_KEY = "bio-simulations-v1";
 const GALLERY_LAYOUT_KEY = "bio-gallery-layout-v1";
+const THEME_KEY = "bio-page-theme-v1";
 const FALLBACK_ADMIN_USERNAME = "**********";
 const FALLBACK_ADMIN_PASSWORD = "**********";
 
@@ -32,6 +33,7 @@ const starterSimulations = [
 let simulations = [];
 let activeSearch = "";
 let activeGalleryLayout = localStorage.getItem(GALLERY_LAYOUT_KEY) || "mosaic";
+let activeTheme = localStorage.getItem(THEME_KEY) || "forest";
 
 const gallery = document.querySelector("#gallery");
 const adminList = document.querySelector("#adminList");
@@ -42,22 +44,12 @@ const loginDialog = document.querySelector("#loginDialog");
 const adminDialog = document.querySelector("#adminDialog");
 const loginForm = document.querySelector("#loginForm");
 const loginError = document.querySelector("#loginError");
+const stylePanel = document.querySelector("#stylePanel");
 const translatePanel = document.querySelector("#translatePanel");
+const themeButtons = document.querySelectorAll("[data-theme]");
+const translateButtons = document.querySelectorAll("[data-translate-lang]");
 const layoutButtons = document.querySelectorAll("[data-gallery-layout]");
 const detailTextButtons = document.querySelectorAll("[data-detail-text]");
-
-window.googleTranslateElementInit = function googleTranslateElementInit() {
-  if (!window.google?.translate?.TranslateElement) return;
-
-  new window.google.translate.TranslateElement(
-    {
-      pageLanguage: "en",
-      layout: window.google.translate.TranslateElement.InlineLayout.SIMPLE,
-      autoDisplay: false,
-    },
-    "google_translate_element"
-  );
-};
 
 function loadLocalSimulations() {
   const stored = localStorage.getItem(STORAGE_KEY);
@@ -226,6 +218,17 @@ function applyGalleryLayout(layout) {
 
   layoutButtons.forEach((button) => {
     button.setAttribute("aria-pressed", String(button.dataset.galleryLayout === activeGalleryLayout));
+  });
+}
+
+function applyTheme(theme) {
+  const allowedThemes = ["forest", "ocean", "coral", "orchid"];
+  activeTheme = allowedThemes.includes(theme) ? theme : "forest";
+  document.body.dataset.theme = activeTheme;
+  localStorage.setItem(THEME_KEY, activeTheme);
+
+  themeButtons.forEach((button) => {
+    button.setAttribute("aria-pressed", String(button.dataset.theme === activeTheme));
   });
 }
 
@@ -407,9 +410,40 @@ document.querySelector("#exportButton").addEventListener("click", exportData);
 document.querySelector("#closeDialog").addEventListener("click", () => dialog.close());
 document.querySelector("#closeLogin").addEventListener("click", () => loginDialog.close());
 document.querySelector("#closeAdmin").addEventListener("click", () => adminDialog.close());
+document.querySelector("#styleToggle").addEventListener("click", () => {
+  translatePanel.classList.remove("is-open");
+  document.querySelector("#translateToggle").setAttribute("aria-expanded", "false");
+  const isOpen = stylePanel.classList.toggle("is-open");
+  document.querySelector("#styleToggle").setAttribute("aria-expanded", String(isOpen));
+});
 document.querySelector("#translateToggle").addEventListener("click", () => {
+  stylePanel.classList.remove("is-open");
+  document.querySelector("#styleToggle").setAttribute("aria-expanded", "false");
   const isOpen = translatePanel.classList.toggle("is-open");
   document.querySelector("#translateToggle").setAttribute("aria-expanded", String(isOpen));
+});
+themeButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    applyTheme(button.dataset.theme);
+  });
+});
+translateButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    const language = button.dataset.translateLang;
+    const currentUrl = window.location.href;
+
+    if (language === "en") {
+      window.location.href = currentUrl;
+      return;
+    }
+
+    const translatedUrl =
+      "https://translate.google.com/translate?sl=en&tl=" +
+      encodeURIComponent(language) +
+      "&u=" +
+      encodeURIComponent(currentUrl);
+    window.open(translatedUrl, "_blank", "noopener");
+  });
 });
 layoutButtons.forEach((button) => {
   button.addEventListener("click", () => {
@@ -491,6 +525,7 @@ adminDialog.addEventListener("click", (event) => {
 });
 
 async function init() {
+  applyTheme(activeTheme);
   simulations = await loadSimulations();
   render();
 }

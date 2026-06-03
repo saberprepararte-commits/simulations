@@ -14,17 +14,19 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
+    <link rel="icon" type="image/svg+xml" href="./assets/favicon-dna.svg" />
     <link rel="stylesheet" href="./styles.css" />
     <script defer src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
     <script defer src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script defer src="./supabase-config.js"></script>
     <script defer src="./app.js"></script>
-    <script defer src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
   </head>
   <body>
     <header class="site-header">
       <a class="brand" href="#home" aria-label="Go to home">
-        <span class="brand-mark">Bio</span>
+        <span class="brand-mark" aria-hidden="true">
+          <img src="./assets/favicon-dna.svg" alt="" />
+        </span>
         <span>
           <strong>Simulations</strong>
           <small>Interactive lab</small>
@@ -32,13 +34,44 @@
       </a>
       <nav class="top-nav" aria-label="Main">
         <a href="#gallery">Gallery</a>
+        <button class="style-toggle" id="styleToggle" type="button" aria-expanded="false">
+          <i data-lucide="palette"></i>
+          Style
+        </button>
         <button class="translate-toggle" id="translateToggle" type="button" aria-expanded="false">
           <i data-lucide="languages"></i>
           Translate
         </button>
       </nav>
+      <div class="style-panel" id="stylePanel" aria-label="Color style selector">
+        <button type="button" data-theme="forest" aria-pressed="true">
+          <span class="theme-dot forest"></span>
+          Forest
+        </button>
+        <button type="button" data-theme="ocean" aria-pressed="false">
+          <span class="theme-dot ocean"></span>
+          Ocean
+        </button>
+        <button type="button" data-theme="coral" aria-pressed="false">
+          <span class="theme-dot coral"></span>
+          Coral
+        </button>
+        <button type="button" data-theme="orchid" aria-pressed="false">
+          <span class="theme-dot orchid"></span>
+          Orchid
+        </button>
+      </div>
       <div class="translate-panel" id="translatePanel" aria-label="Language selector">
-        <div id="google_translate_element"></div>
+        <button type="button" data-translate-lang="en">English</button>
+        <button type="button" data-translate-lang="es">Español</button>
+        <button type="button" data-translate-lang="fr">Français</button>
+        <button type="button" data-translate-lang="pt">Português</button>
+        <button type="button" data-translate-lang="de">Deutsch</button>
+        <button type="button" data-translate-lang="it">Italiano</button>
+        <button type="button" data-translate-lang="zh-CN">中文</button>
+        <button type="button" data-translate-lang="ja">日本語</button>
+        <button type="button" data-translate-lang="ko">한국어</button>
+        <button type="button" data-translate-lang="ar">العربية</button>
       </div>
     </header>
 
