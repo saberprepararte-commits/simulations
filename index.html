@@ -15,11 +15,33 @@
       rel="stylesheet"
     />
     <link rel="icon" type="image/svg+xml" href="./assets/favicon-dna.svg" />
-    <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="./styles.css?v=20260603-theme2" />
+    <style>
+      .style-panel,
+      .translate-panel {
+        display: none;
+      }
+
+      .style-panel.is-open,
+      .translate-panel.is-open {
+        display: grid;
+      }
+
+      .style-toggle,
+      .translate-toggle {
+        border: 0;
+        border-bottom: 2px solid transparent;
+        background: transparent;
+        color: inherit;
+        cursor: pointer;
+        font: inherit;
+        font-weight: 800;
+      }
+    </style>
     <script defer src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
     <script defer src="https://unpkg.com/@supabase/supabase-js@2"></script>
-    <script defer src="./supabase-config.js"></script>
-    <script defer src="./app.js"></script>
+    <script defer src="./supabase-config.js?v=20260603-theme2"></script>
+    <script defer src="./app.js?v=20260603-theme2"></script>
   </head>
   <body>
     <header class="site-header">
